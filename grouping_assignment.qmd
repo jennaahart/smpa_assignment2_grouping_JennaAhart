@@ -158,7 +158,7 @@ payments %>%
 
 What's the most common category overall (see "disbursement_description") the campaign spent money on?
 
-**The most common category was merchant fees. I grouped by disbursement description, and summarized with a new variable count. I arranged in descending order to find the highest value.**
+**The most common category was merchant fees. I grouped by disbursement description, and summarized with a new variable count. I arranged in descending order to find the highest value for count.**
 
 ```{r}
 
@@ -210,7 +210,7 @@ payments %>%
 
 For the indvidual who was paid the most, which payment category (disbursement_description) was the top one for him or her? And how much money were they paid in that category?
 
-**Michael Glassner received the most in Payroll with \$499000. I filtered to only include Glassner. Then I grouped by disbursement description, summarized by the total disbursement amount, and arranged by disbursement amount in descending order to find the highest possible value.**
+**Michael Glassner received the most in Payroll with \$499,000. I filtered to only include Glassner. Then I grouped by disbursement description, summarized by the total disbursement amount, and arranged by disbursement amount in descending order to find the highest possible value.**
 
 ```{r}
 
