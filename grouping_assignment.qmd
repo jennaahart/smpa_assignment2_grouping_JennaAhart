@@ -1,6 +1,6 @@
 ---
 title: "SMPA - Grouping Assignment"
-author: "YourNameHere"
+author: "Jenna Ahart"
 date: "`r format(Sys.time(), '%B %d, %Y')`"
 format:
   html:
@@ -61,11 +61,11 @@ Take a moment to look at the various categories included for each disbursement.
 
 Without doing any analysis yet, what are three questions you might try to answer using this dataset? Write your narrative answers in the spaces below.
 
-1.  
+1.  What year were the most disbursements made?
 
-2.  
+2.  Which organizations received the most disbursements?
 
-3.  
+3.  What type of organizations received the most disbursements?
 
 ## Coding Assignment Questions
 
@@ -79,8 +79,13 @@ Without doing any analysis yet, what are three questions you might try to answer
 
 How much was spent in the 2017 vs. 2018 reporting year?
 
+**I used the group command to group the data by reporting year. Then, I summarized with a new variable calculated with the sum of each disbursement from that year.**
+
 ```{r}
 
+payments %>% 
+  group_by(report_year) %>% 
+  summarise(total_disburse = sum(disbursement_amount,na.rm = TRUE))
 
 
 
@@ -91,9 +96,15 @@ How much was spent in the 2017 vs. 2018 reporting year?
 
 Tally the total overall disbursement amounts for each month (distinguishing between say, Oct. 2018 v. Oct. 2019). In which month was spending the highest?
 
+**The highest spending was in October 2018. This time I grouped by disbursement month and year so the the same months from different years were separated. I used the same summarize variable. Then I arranged descending based on the total disbursement to find the month when the most was spent.**
+
 ```{r}
 
 
+payments %>% 
+  group_by(disbursement_month, disbursement_year) %>% 
+  summarise(total_disburse = sum(disbursement_amount,na.rm = TRUE))%>%
+  arrange(desc(total_disburse))
 
 
 
@@ -102,10 +113,15 @@ Tally the total overall disbursement amounts for each month (distinguishing betw
 
 Which recipient (recipient_name) was paid the most in the 2020 election cycle?
 
+**American Made Money Consultants received the most. I grouped by recipient name, summarized with total disbursement, and arranged the disbursements in descending order so I could find the highest value.**
+
 ```{r}
 
 
-
+payments %>% 
+  group_by(recipient_name) %>% 
+  summarise(total_disburse = sum(disbursement_amount,na.rm = TRUE))%>%
+  arrange(desc(total_disburse))
 
 
 
@@ -114,8 +130,25 @@ Which recipient (recipient_name) was paid the most in the 2020 election cycle?
 
 Look at what this recipient was paid for. What service or good (see the "disbursement_description") were they paid the most for?
 
+**They were paid the most for placed media. I filtered to only include American Made Media. Then I grouped by disbursement description, summarized using the total disbursement, and arranged in descending order to find the highest value.**
+
+payments %\>%
+
+filter(recipient_name == "AMERICAN MADE MEDIA CONSULTANTS, LLC") %\>%
+
+group_by(disbursement_description) %\>%
+
+summarise(total_disburse = sum(disbursement_amount,na.rm = TRUE))%\>%
+
+arrange(desc(total_disburse))
+
 ```{r}
 
+payments %>% 
+  filter(recipient_name == "AMERICAN MADE MEDIA CONSULTANTS, LLC") %>%
+  group_by(disbursement_description) %>% 
+  summarise(total_disburse = sum(disbursement_amount,na.rm = TRUE))%>%
+  arrange(desc(total_disburse))
 
 
 
@@ -125,9 +158,14 @@ Look at what this recipient was paid for. What service or good (see the "disburs
 
 What's the most common category overall (see "disbursement_description") the campaign spent money on?
 
+**The most common category was merchant fees. I grouped by disbursement description, and summarized with a new variable count. I arranged in descending order to find the highest value.**
+
 ```{r}
 
-
+payments %>% 
+  group_by(disbursement_description) %>% 
+  summarise(count = n()) %>%
+  arrange(desc(count))
 
 
 
@@ -136,36 +174,52 @@ What's the most common category overall (see "disbursement_description") the cam
 
 Who were the 5 biggest recipients of campaign spending on "LEGAL CONSULTING"..?
 
+**The 5 biggest recipients are JONES DAY, LAROCCA HORNIK ROSEN GREENBERG & BLAHA LLP, KASOWITZ, BENSON, TORRESS & FRIEDMAN, THE LAW OFFICES OF ALAN S. FUTERFAS, and MCDERMOTT WILL & EMERY. I filtered to only include legal consulting, grouped by recipient name, summarized by total disbursement, and arranged the total disbursement in descending order to find the 5 largest values.**
+
 ```{r}
 
 
-
+payments %>% 
+  filter(disbursement_description == "LEGAL CONSULTING") %>%
+  group_by(recipient_name) %>% 
+  summarise(total_disburse = sum(disbursement_amount,na.rm = TRUE))%>%
+  arrange(desc(total_disburse))
 
 
 
 
 ```
-
 
 Who are the top 5 individuals (vs. organization) were paid by the campaign committee?
 
+**The top 5 individuals are Michael Glassner, Sean Dollman, Darren Centinello, Christopher Carr, and John Pence. I filtered to only include individual entities. I grouped by recipient name, summarized by total disbursement, and arranged in descending order by disbursement to find the 5 highest values.**
+
 ```{r}
 
 
-
+payments %>%
+  filter(entity_type == "IND") %>%
+  group_by(recipient_name) %>% 
+  summarise(total_disburse = sum(disbursement_amount,na.rm = TRUE))%>%
+  arrange(desc(total_disburse))
 
 
 
 
 ```
 
-
 For the indvidual who was paid the most, which payment category (disbursement_description) was the top one for him or her? And how much money were they paid in that category?
+
+**Michael Glassner received the most in Payroll with \$499000. I filtered to only include Glassner. Then I grouped by disbursement description, summarized by the total disbursement amount, and arranged by disbursement amount in descending order to find the highest possible value.**
 
 ```{r}
 
 
-
+payments %>%
+  filter(recipient_name == "GLASSNER, MICHAEL") %>%
+  group_by(disbursement_description) %>% 
+  summarise(total_disburse = sum(disbursement_amount,na.rm = TRUE))%>%
+  arrange(desc(total_disburse))
 
 
 
